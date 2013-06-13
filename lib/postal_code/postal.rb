@@ -4,13 +4,13 @@ module PostalCode
     include ActiveModel::Conversion
     extend ActiveModel::Naming
 
-    ATTRIBUTES = [:jis_code, :post_office_name_kana, :post_office_name_kanji, :province,
-    :city, :town, :number, :post_number, :post_former_number, :telegraph_office,
-    :classification_number, :plural_tag, :update_code]
+    ATTRIBUTES = [:jis_code, :former_post_code, :post_code, :province_kana, :city_kana, 
+    :town_kana, :province_kanji, :city_kanji, :town_kanji, :plural_code, :unknow, 
+    :district_of_a_town, :plural_town, :update, :update_reason]
 
-    attr_accessor :jis_code, :post_office_name_kana, :post_office_name_kanji, :province,
-    :city, :town, :number, :post_number, :post_former_number, :telegraph_office,
-    :classification_number, :plural_tag, :update_code
+    attr_accessor :jis_code, :former_post_code, :post_code, :province_kana, :city_kana, 
+    :town_kana, :province_kanji, :city_kanji, :town_kanji, :plural_code, :unknow, 
+    :district_of_a_town, :plural_town, :update, :update_reason 
 
     def initialize (attributes = {})
       attributes.each do |name, value|

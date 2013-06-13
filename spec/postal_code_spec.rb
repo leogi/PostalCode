@@ -13,12 +13,12 @@ describe PostalCode::JapanPostal do
   end
 
   context "#detect" do
-    subject {@jpostal.detect(post_former_number: "066").length}
+    subject {@jpostal.detect(former_post_code: "066").length}
     it {should_not == 0}
   end
 
   context ".where" do
-    subject {PostalCode::JapanPostal.where(post_former_number: "252").length}
+    subject {PostalCode::JapanPostal.where(former_post_code: "252").length}
     it {should_not == 0}
   end
 end
