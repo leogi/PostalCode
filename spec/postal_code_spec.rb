@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'postal_code'
 
 describe PostalCode::JapanPostal do
   before {@jpostal = PostalCode::JapanPostal.instance}
@@ -12,13 +11,45 @@ describe PostalCode::JapanPostal do
     it {should == true}
   end
 
-  context "#detect" do
+  describe "#detect" do
     subject {@jpostal.detect(former_post_code: "066").length}
     it {should_not == 0}
   end
 
-  context ".where" do
+  describe ".where" do
     subject {PostalCode::JapanPostal.where(former_post_code: "252").length}
     it {should_not == 0}
+  end
+
+  describe "#first" do
+    it {@jpostal.first.should == @jpostal.postals.first}
+  end
+
+  describe "#last" do
+    it {@jpostal.last.should == @jpostal.postals.last}
+  end
+
+  describe "#object_at" do
+
+    context "one of argument" do
+      it {@jpostal.object_at(0).should_not nil}
+    end
+
+    context "two of argument" do
+      it {@jpostal.object_at(0, 2).length.should == 2}
+    end
+    
+    context "argument is range" do
+      it {@jpostal.object_at(1..10).length.should == 10}
+    end
+
+    context "invalid integer argument" do
+      it {@jpostal.object_at("0").should == nil}
+    end
+
+    context "invalid number of arrgument" do
+      it {@jpostal.object_at(1,2,3,4).should == nil}
+    end
+
   end
 end
