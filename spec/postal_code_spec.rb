@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'spec_helper'
 
 describe PostalCode::JapanPostal do
@@ -28,7 +29,7 @@ describe PostalCode::JapanPostal do
   describe "#last" do
     it {@jpostal.last.should == @jpostal.postals.last}
   end
-
+  
   describe "#object_at" do
 
     context "one of argument" do
@@ -46,16 +47,75 @@ describe PostalCode::JapanPostal do
     context "invalid integer argument" do
       it {@jpostal.object_at("0").should == nil}
     end
-
+    
     context "invalid number of arrgument" do
       it {@jpostal.object_at(1,2,3,4).should == nil}
     end
-
+    
   end
-
+  
   describe ".all" do
     before {@postals = PostalCode::JapanPostal.all}
     it {@postals.is_a?(Array).should == true}
+  end
+
+  describe ".find_with_code" do
+    context "correct code" do
+      before {@results = PostalCode::JapanPostal.find_with_code("2520815")}
+      it {@results.length.should_not == 0}
+    end
+    context "incorrect code" do
+      before {@results = PostalCode::JapanPostal.find_with_code("123123")}
+      it {@results.length.should == 0}
+    end
+  end
+
+  describe ".find_with_address" do
+    context "one params" do
+      context "correct address" do
+        let(:address){"藤沢"}
+        before {@results = PostalCode::JapanPostal.find_with_address(address)}
+        it {@results.length.should_not == 0}
+      end
+      context "incorrect address" do
+        let(:address){"藤沢偽ああ"}
+        before {@results = PostalCode::JapanPostal.find_with_address(address)}
+        it {@results.length.should == 0}
+      end
+    end
+
+    context "two params" do
+      context "correct address" do
+        let(:address1){"藤沢"}
+        let(:address2){"石川"}
+        before {@results = PostalCode::JapanPostal.find_with_address(address1, address2)}
+        it {@results.length.should_not == 0}
+      end
+      context "incorrect address" do
+        let(:address1){"藤沢偽ああ"}
+        let(:address2){"石川"}
+        before {@results = PostalCode::JapanPostal.find_with_address(address1, address2)}
+        it {@results.length.should == 0}
+      end
+    end
+
+    context "three params" do
+      context "correct address" do
+        let(:address1){"神奈川"}
+        let(:address2){"藤沢"}
+        let(:address3){"石川"}
+        before{@results = PostalCode::JapanPostal.find_with_address(address1, address2, address3)}
+        it {@results.length.should_not == 0}
+      end
+      context "incorrect address" do
+        let(:address1){"神奈川"}
+        let(:address2){"藤沢偽ああ"}
+        let(:address3){"石川"}
+        before{@results = PostalCode::JapanPostal.find_with_address(address1, address2, address3)}
+        it {@results.length.should == 0}
+      end
+    end
+
   end
 
 end

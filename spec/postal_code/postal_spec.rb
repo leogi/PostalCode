@@ -21,7 +21,6 @@ describe PostalCode::Postal do
   it {should respond_to(:update)}
   it {should respond_to(:update_reason)}
 
-  describe "#match_conditions" do
     before {@postal = PostalCode::Postal.new(jis_code: "123123",
                                              former_post_code: "252",
                                              post_code: "2520815",
@@ -37,6 +36,9 @@ describe PostalCode::Postal do
                                              plural_town: 0,
                                              update: 0,
                                              update_reason: 0)}
+
+  describe "#match_conditions" do
+
     context "match condition" do
       let(:conditions){ {post_code: "2520815", province_kana: "province"} }
       it {@postal.match_conditions?(conditions).should == true}
@@ -54,4 +56,80 @@ describe PostalCode::Postal do
 
   end
 
+  describe "#match_post_code" do
+
+    context "match post code" do
+      let(:code){ "2520815" }
+      it {@postal.match_post_code?(code).should == true}
+    end
+
+    context "not match post code" do
+      let(:code){ "2520817" }
+      it {@postal.match_post_code?(code).should == false}
+    end
+
+  end
+
+  describe "#match_address" do
+    
+    context "invalid param" do
+      context "no params" do
+        it "raise error" do 
+          expect {@postal.match_address?}.to raise_error(ArgumentError)
+        end
+      end
+      
+      context "too much params" do
+        it "raise error" do
+          expect {@postal.match_address?(1,2,3,4,5)}.to raise_error(ArgumentError)
+        end
+      end
+    end
+
+    context "one param" do
+      
+      context "match address" do
+        let(:address){ "city" }
+        it {@postal.match_address?(address).should == true}
+      end
+      
+      context "not match address" do
+        let(:address){ "adsfasfd" }
+        it {@postal.match_address?(address).should == false}
+      end
+      
+    end
+    
+    context "two param" do
+      
+      context "match" do
+        let(:first){"province"}
+        let(:last){"city"}
+        it {@postal.match_address?(first, last).should == true}
+      end
+      
+      context "not match" do
+        let(:first){"invalid_province"}
+        let(:last){"cit"}
+        it {@postal.match_address?(first, last).should == false}
+      end
+      
+    end
+    
+    context "three param" do
+      context "match" do
+        let(:province){"province"}
+        let(:city){"city"}
+        let(:town){"town"}
+        it{@postal.match_address?(province, city, town).should == true}
+      end
+      
+      context "not match" do
+        let(:province){"province"}
+        let(:city){"invalid_city"}
+        let(:town){"town"}
+        it{@postal.match_address?(province, city, town).should == false}
+      end
+    end
+  end
 end
