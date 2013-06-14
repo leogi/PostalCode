@@ -53,6 +53,10 @@ module PostalCode
       def object_at *indexes
         PostalCode::JapanPostal.instance.object_at *indexes
       end
+
+      def all
+        PostalCode::JapanPostal.instance.postals
+      end
     end
 
   end

@@ -52,4 +52,10 @@ describe PostalCode::JapanPostal do
     end
 
   end
+
+  describe ".all" do
+    before {@postals = PostalCode::JapanPostal.all}
+    it {@postals.is_a?(Array).should == true}
+  end
+
 end
